@@ -2,8 +2,15 @@ class PostImage < ApplicationRecord
   has_one_attached :image
   
   has_many :post_comments, dependent: :destroy
-  
+  has_many :favorites, dependent: :destroy
   belongs_to :user
+  
+  validates :shop_name, presence: true
+  validates :image, presence: true
+  
+  def favorited_by?(user)
+    favorites.exists?(user_id: user.id)
+  end
   
   def get_image
     unless image.attached?
